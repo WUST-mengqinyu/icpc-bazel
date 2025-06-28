@@ -17,6 +17,8 @@ use std::{
     time::{Duration, Instant},
 };
 use thread_manager::ThreadManager;
+
+use crate::checker::DynamicLibChecker;
 pub mod thread_manager;
 
 #[derive(Debug)]
@@ -536,12 +538,7 @@ impl CompareRun {
         Ok((bf, solver))
     }
 
-    fn compare<C>(
-        &self,
-        checker: C,
-        bf_out: &[u8],
-        solver_out: &[u8],
-    ) -> CompareResult
+    fn compare<C>(&self, checker: C, bf_out: &[u8], solver_out: &[u8]) -> CompareResult
     where
         C: checker::Checker,
     {
@@ -622,9 +619,9 @@ impl CompareRun {
             )
         })?;
 
-        self.do_with_stage(worker_id, tx, Stage::RunChecker, || {
-            self.compare(checker, &bf_out, &solver_out)
-        })
+        Ok(self.do_with_stage(worker_id, tx, Stage::RunChecker, || {
+            self.compare(DynamicLibChecker(checker), &bf_out, &solver_out)
+        }))
     }
 }
 

@@ -31,7 +31,7 @@ pub struct Config {
 #[derive(Clone, serde::Deserialize, serde::Serialize)]
 pub struct ClipBoardProxy {
     pub enable: bool,
-    pub clip_board_proxy_path: PathBuf,
+    // pub clip_board_proxy_path: PathBuf,
     pub forward_host: (IpAddr, u16),
     pub max_pack_bytes_size: usize,
     pub try_use_sys_cmd: bool,
@@ -90,8 +90,8 @@ impl Default for Config {
             running_mode: Some(RunningMode::default()),
             clipboard_proxy: Some(ClipBoardProxy {
                 enable: true,
-                clip_board_proxy_path: std::path::PathBuf::from(PROJECT_DIR)
-                    .join("bin/clipboard-proxy"),
+                // clip_board_proxy_path: std::path::PathBuf::from(PROJECT_DIR)
+                // .join("bin/clipboard-proxy"),
                 forward_host: (IpAddr::V4(Ipv4Addr::new(0, 0, 0, 0)), 10046),
                 max_pack_bytes_size: 4 * 1024 * 1024,
                 try_use_sys_cmd: true,

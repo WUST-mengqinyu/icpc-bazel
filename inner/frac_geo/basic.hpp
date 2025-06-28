@@ -29,14 +29,14 @@ namespace inner {
     il int inmid(db k1, db k2, db k3) { return sign(k1 - k3) * sign(k2 - k3) <= 0; }
     struct point {
       db x, y;
-      point operator+(const point &k1) const { return (point){k1.x + x, k1.y + y}; }
-      point operator-(const point &k1) const { return (point){x - k1.x, y - k1.y}; }
-      point operator*(db k1) const { return (point){x * k1, y * k1}; }
-      point operator/(db k1) const { return (point){x / k1, y / k1}; }
+      point operator+(const point &k1) const { return (point) {k1.x + x, k1.y + y}; }
+      point operator-(const point &k1) const { return (point) {x - k1.x, y - k1.y}; }
+      point operator*(db k1) const { return (point) {x * k1, y * k1}; }
+      point operator/(db k1) const { return (point) {x / k1, y / k1}; }
       int operator==(const point &k1) const { return cmp(x, k1.x) == 0 && cmp(y, k1.y) == 0; }
       // 逆时针旋转
       //point turn(db k1) { return (point){x * cos(k1) - y * sin(k1), x * sin(k1) + y * cos(k1)}; }
-      point turn90() { return (point){-y, x}; }
+      point turn90() { return (point) {-y, x}; }
       bool operator<(const point &k1) const {
         int a = cmp(x, k1.x);
         if (a == -1) return 1;

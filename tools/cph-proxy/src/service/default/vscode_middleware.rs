@@ -62,7 +62,18 @@ mod tests {
             },
         }"#;
         struct MockInner;
-        let h = VscodeAdapter { inner: MockInner };
+        #[async_trait::async_trait]
+        impl ProblemMetaWithTestCaseHandler for MockInner {
+            async fn handle(&self, data: &ProblemMetaWithTestCase) -> anyhow::Result<()> {
+                Ok(())
+            }
+            fn detecte(&self, data: &ProblemMetaWithTestCase) -> anyhow::Result<String> {
+                Ok("cf1234".to_string())
+            }
+        }
+        let h = VscodeAdapter {
+            inner: Box::new(MockInner),
+        };
         let new = h.replace_running_contest(&s, "cf1234");
         assert_eq!(
             new.chars()

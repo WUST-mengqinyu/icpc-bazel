@@ -1,6 +1,7 @@
 use std::{ffi::OsString, io::Write, process::Stdio, str::FromStr};
 
 use anyhow::{Context, Result};
+use arboard::Clipboard;
 use cli_clipboard::ClipboardProvider;
 use log::*;
 use tokio::{io::AsyncReadExt, net::TcpStream};
@@ -44,13 +45,24 @@ fn auto_ctx_set_clipboard<S: AsRef<str>>(recv: S) -> Result<()> {
     }) {
     } else {
         set_content(
-            cli_clipboard::ClipboardContext::new()
+            Clipboard::new()
+                // cli_clipboard::ClipboardContext::new()
                 .map_err(|e| anyhow::anyhow!(e.to_string()))
                 .with_context(|| "init clipboard ctx failed")?,
             &recv,
         )?;
     }
     Ok(())
+}
+
+trait ClipboardSetter {
+    fn set_content(&mut self, content: String) -> anyhow::Result<()>;
+}
+
+impl ClipboardSetter for Clipboard {
+    fn set_content(&mut self, content: String) -> anyhow::Result<()> {
+        Ok(self.set_text(content)?)
+    }
 }
 
 fn try_wl_copy<S: AsRef<str>>(cfg: cfg::ClipBoardProxy, recv: S) -> Result<()> {
@@ -78,8 +90,8 @@ fn try_wl_copy<S: AsRef<str>>(cfg: cfg::ClipBoardProxy, recv: S) -> Result<()> {
 }
 
 // FIXME: use https://github.com/bugaevc/wl-clipboard to support cross platform
-fn set_content<P: ClipboardProvider, S: AsRef<str>>(mut p: P, content: S) -> Result<()> {
-    p.set_contents(content.as_ref().to_owned())
+fn set_content<P: ClipboardSetter, S: AsRef<str>>(mut p: P, content: S) -> Result<()> {
+    p.set_content(content.as_ref().to_owned())
         .map_err(|e| anyhow::anyhow!(e.to_string()))
         .with_context(|| "failed to copy to clipboard")?;
     Ok(())

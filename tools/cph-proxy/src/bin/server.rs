@@ -36,14 +36,12 @@ async fn clipboard_proxy() -> anyhow::Result<()> {
                 loop {
                     // let permit = semaphore.clone().acquire().await?;
                     let (socket, _) = listener.accept().await?;
-                    tokio::spawn(
-                        async {
-                            if let Err(e) = handler::clipboard_proxy::clipboard_handler(socket).await {
-                                error!("clipboard set err: {e}");
-                            }
-                             // drop(permit);
+                    tokio::spawn(async {
+                        if let Err(e) = handler::clipboard_proxy::clipboard_handler(socket).await {
+                            error!("clipboard set err: {e}");
                         }
-                    );
+                        // drop(permit);
+                    });
                 }
             }
         }

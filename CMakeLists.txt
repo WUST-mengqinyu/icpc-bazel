@@ -71,7 +71,7 @@ if(${COMPILE_EXT})
 endif()
 
 # main
-add_icpc_executable(main main.cc)
+add_icpc_executable(bin_main main.cc)
 
 get_property(icpc_executable_list GLOBAL PROPERTY ICPC_EXECUTABLES_LIST)
 get_property(icpc_main_source GLOBAL PROPERTY ICPC_MAIN_SOURCE)

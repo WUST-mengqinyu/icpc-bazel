@@ -40,7 +40,7 @@ impl Checker for WCmp {
     }
 }
 
-pub struct DynamicLibChecker(std::path::PathBuf);
+pub struct DynamicLibChecker(pub std::path::PathBuf);
 
 impl Checker for DynamicLibChecker {
     fn check_inner(&self, a: &str, b: &str) -> crate::CompareResult {
